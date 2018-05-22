@@ -1,0 +1,13 @@
+# Target labels
+ gtest
+# Source files and their labels
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/gtest
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/gtest.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/gtest-complete.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-install.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-mkdir.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-download.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-update.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-patch.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-configure.rule
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-build.rule

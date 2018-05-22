@@ -1,0 +1,51 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_e63e3/fast"
+/usr/bin/make -f CMakeFiles/cmTC_e63e3.dir/build.make CMakeFiles/cmTC_e63e3.dir/build
+make[1]: Entering directory '/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e63e3.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_e63e3.dir/CheckSymbolExists.c.o   -c /home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_e63e3
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e63e3.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_e63e3.dir/CheckSymbolExists.c.o  -o cmTC_e63e3 
+CMakeFiles/cmTC_e63e3.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_e63e3.dir/build.make:98: cmTC_e63e3] Error 1
+make[1]: Leaving directory '/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp'
+make: *** [Makefile:126: cmTC_e63e3/fast] Error 2
+
+File /home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_122c9/fast"
+/usr/bin/make -f CMakeFiles/cmTC_122c9.dir/build.make CMakeFiles/cmTC_122c9.dir/build
+make[1]: Entering directory '/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_122c9.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_122c9.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_122c9
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_122c9.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_122c9.dir/CheckFunctionExists.c.o  -o cmTC_122c9 -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_122c9.dir/build.make:98: cmTC_122c9] Error 1
+make[1]: Leaving directory '/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/CMakeTmp'
+make: *** [Makefile:126: cmTC_122c9/fast] Error 2
+
+

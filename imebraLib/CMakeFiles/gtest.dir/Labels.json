@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/gtest"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/gtest.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/gtest-complete.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-install.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-mkdir.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-download.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-update.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-patch.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-configure.rule"
+		},
+		{
+			"file" : "/home/rcruz/workspace/Citesoft/dicom/imebraLib/gtest/src/gtest-stamp/gtest-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"gtest"
+		],
+		"name" : "gtest"
+	}
+}

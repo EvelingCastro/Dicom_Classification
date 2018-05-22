@@ -1,0 +1,15 @@
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/install/strip.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/list_install_components.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/edit_cache.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/package_source.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/package.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/rebuild_cache.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/gtest.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/install/local.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/test.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/imebra.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/ImebraTests.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/install.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/dicom2jpeg.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/changeTransferSyntax.dir
+/home/rcruz/workspace/Citesoft/dicom/imebraLib/CMakeFiles/dicomDirItems.dir

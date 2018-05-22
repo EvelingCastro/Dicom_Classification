@@ -1,0 +1,8 @@
+To compile write in a comand line and press enter:
+$ make
+
+To execute the MosesProject write in a comand line and press enter:
+$ ./main
+
+Or together:
+$ make && ./main
