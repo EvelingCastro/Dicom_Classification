@@ -1,10 +1,10 @@
 #!/bin/bash
-
-cp -f main ../images/xray/
-echo "main copied to ../images/xray"
-cp -rf include ../images/xray/
-echo "include copied to ../images/xray"
-cp -rf imebraLib ../images/xray/
-echo "imebraLib copied to ../images/xray"
-cd ../images/xray/
+echo $1
+cp -f main "$1"
+echo "main copied to $1"
+cp -rf include "$1"
+echo "include copied to $1"
+cp -rf imebraLib "$1"
+echo "imebraLib copied to $1"
+cd "$1"
 ./main
