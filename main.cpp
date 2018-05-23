@@ -7,6 +7,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <string.h>
+#include <sstream>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -21,10 +24,24 @@ using namespace std;
 // PatientAge_0010_1010
 
 int row,col,width,first,percent;
+char a='|';
+string zones[100000];
+int limit = 0;
 static volatile sig_atomic_t interrupted = 0;
 
 void term(int signum){
     interrupted = 1;
+}
+
+bool isHere(string name){
+	for(int i=0;i<limit;i++)
+		if(zones[i].compare(name) == 0)
+			return true;
+	return false;
+}
+
+void put(string name){
+	zones[limit++] = name;
 }
 
 void clearLine(int l){
@@ -40,6 +57,19 @@ void writeTitle(string title){
 	mvprintw(row/2-7,(col-title.length())/2," %s ",temp);
 }
 
+void wait(){
+	if(a == '|'){
+		a = '\\';
+	}else if(a == '\\'){
+		a = '-';
+	}else if(a == '-'){
+		a = '/';
+	}else if(a == '/'){
+		a = '|';
+	}
+	mvprintw(row/2-5,(col-3)/2," %c ",a);
+}
+
 void writeStatus(string name){
 	char *temp = new char [name.length()+1];
 	strcpy(temp, name.c_str());
@@ -49,7 +79,7 @@ void writeStatus(string name){
 		other[i] = temp[i];
 		t = i;
 	}
-	for(int i=t;i<(width-7);i++){
+	for(int i=t+1;i<(width-7);i++){
 		other[i] = ' ';
 	}
 	bool cent = percent/100 != 0;
@@ -67,17 +97,22 @@ void writeStatus(string name){
 	mvprintw(row/2-3,first,"%s",other);
 	attron(COLOR_PAIR(2));
 	move(row/2-1,first-1);
+	attron(COLOR_PAIR(1));
 	addch('[');
+	attron(COLOR_PAIR(2));
 	for(int i=first;i<(width*percent/100+first);i++){
 		move(row/2-1,i);
 		addch(' ');
 	}
 	move(row/2-1,width+first);
+	attron(COLOR_PAIR(1));
 	addch(']');
+	attron(COLOR_PAIR(2));
 }
 
 
 int main(){
+	setlocale(LC_ALL, "");
 	signal(SIGINT, term);
 
 	std::ofstream outfile;
@@ -88,14 +123,13 @@ int main(){
 	if ((dir = opendir (".")) != NULL) {
   	/* print all the files and directories within directory */
 
-		unsigned int mili = 1; 
-		char mesg[]="Just a string";
 		initscr();
 		//raw();
 		noecho();
 		start_color();
 		init_pair(1, COLOR_WHITE, COLOR_BLACK);
 		init_pair(2, COLOR_BLACK, COLOR_WHITE);
+		init_pair(3, COLOR_WHITE, COLOR_RED);
 		curs_set(0);
 		getmaxyx(stdscr,row,col);
 
@@ -103,7 +137,6 @@ int main(){
 		first = (col - width)/2;
 
 		attron(COLOR_PAIR(2));
-		//mvprintw(1,(col-strlen(mesg))/2,"%s",mesg);
 		percent = 0;
 		
 		outfile << "NAME;REGION;SEX;AGE" << std::endl;
@@ -111,33 +144,48 @@ int main(){
 		int count = 0;
 		while ((ent = readdir (dir)) != NULL){
 			writeTitle("Counting images");
-			refresh();
-			total++;
-		}
-		dir = opendir (".");
-		//mvprintw(0,0,"%i",total);
-		
-		while ((ent = readdir (dir)) != NULL) {
-			count++;
-			writeTitle("Analizing all images");
+			wait();
 			refresh();
 			std::string str = ent->d_name;
 			if(str.length() < 4)
 				continue;
 			std::string extension = str.substr(str.length() - 4);
 			if(extension.compare(".dcm") == 0){
+				total++;
+			}
+		}
+		clearLine(row/2-5);
+		dir = opendir (".");
+		
+		while ((ent = readdir (dir)) != NULL) {
+			wait();
+			writeTitle("Analyzing images");
+			refresh();
+			std::string str = ent->d_name;
+			writeStatus(str);
+			refresh();
+			if(str.length() < 4)
+				continue;
+			std::string extension = str.substr(str.length() - 4);
+			if(extension.compare(".dcm") == 0){
+				count++;
 				//printf ("%s\n", ent->d_name);
 				std::unique_ptr<imebra::DataSet> loadedDataSet(imebra::CodecFactory::load(ent->d_name));
 				std::string patientInformation;
 				try{
 					patientInformation = loadedDataSet->getString(imebra::TagId(imebra::tagId_t::StudyDescription_0008_1030), 0);
-					//std::wcout << "Hello " << (std::wcscmp(patientInformation.data(),L"Tórax")) << std::endl;
-					outfile << patientInformation << ";";
-					//std::cout << patientInformation << std::endl;
-					writeStatus(patientInformation);
-					refresh();
+					if(patientInformation.empty())
+						patientInformation = loadedDataSet->getString(imebra::TagId(imebra::tagId_t::SeriesDescription_0008_103E), 0);
+					outfile << patientInformation.c_str() << ";" << endl;
 					
+					if(!isHere(patientInformation)){
+						put(patientInformation);
+					}
+
 				}catch(imebra::MissingTagError e){
+					patientInformation = loadedDataSet->getString(imebra::TagId(imebra::tagId_t::SeriesDescription_0008_103E), 0);
+					outfile << patientInformation.c_str() << ";" << endl;
+				}catch(imebra::MissingGroupError e){
 				}catch(imebra::CodecWrongFormatError e){
 				}catch(imebra::StreamEOFError e){
 				}
@@ -145,7 +193,8 @@ int main(){
 			percent = count*100/total;
 			if (interrupted){
 		        clear();
-		        mvprintw((row-1)/2,(col-24)/2,"A SIGNAL WAS ENCOUNTERED");
+		        attron(COLOR_PAIR(3));
+		        mvprintw((row-1)/2,(col-26)/2," A SIGNAL WAS ENCOUNTERED ");
 		        refresh();
 		        sleep(1);
 				closedir (dir);
@@ -156,6 +205,126 @@ int main(){
 		        exit(0);
 		    }
 		}
+		clear();
+		percent = 0;
+		total = limit;
+		count = 0;
+		while(count < limit){
+			count++;
+			wait();
+			writeTitle("Creating folders");
+			refresh();
+			stringstream s;
+			s << "./" << zones[count];
+			string path = s.str();
+			int status;
+			writeStatus(path);
+			refresh();
+			sleep(1);
+			char *temp = new char [path.length()+1];
+			strcpy(temp, path.c_str());
+			status = mkdir(temp, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+
+			percent = count*100/total;
+			if (interrupted){
+		        clear();
+		        attron(COLOR_PAIR(3));
+		        mvprintw((row-1)/2,(col-26)/2," A SIGNAL WAS ENCOUNTERED ");
+		        refresh();
+		        sleep(1);
+				closedir (dir);
+				clrtoeol();
+				getch();
+		        endwin();
+				outfile.close();
+		        exit(0);
+		    }
+		}
+		clear();
+		percent = 0;
+		while ((ent = readdir (dir)) != NULL){
+			writeTitle("Counting images");
+			wait();
+			refresh();
+			std::string str = ent->d_name;
+			if(str.length() < 4)
+				continue;
+			std::string extension = str.substr(str.length() - 4);
+			if(extension.compare(".dcm") == 0){
+				total++;
+			}
+		}
+		count = 0;
+		dir = opendir (".");
+		
+		while ((ent = readdir (dir)) != NULL){
+			wait();
+			writeTitle("Moving images");
+			refresh();
+			std::string str = ent->d_name;
+			writeStatus(str);
+			refresh();
+			if(str.length() < 4)
+				continue;
+			std::string extension = str.substr(str.length() - 4);
+			if(extension.compare(".dcm") == 0){
+				count++;
+				//printf ("%s\n", ent->d_name);
+				std::unique_ptr<imebra::DataSet> loadedDataSet(imebra::CodecFactory::load(ent->d_name));
+				std::string patientInformation;
+				try{
+					patientInformation = loadedDataSet->getString(imebra::TagId(imebra::tagId_t::StudyDescription_0008_1030), 0);
+					if(patientInformation.empty())
+						patientInformation = loadedDataSet->getString(imebra::TagId(imebra::tagId_t::SeriesDescription_0008_103E), 0);
+					outfile << patientInformation.c_str() << ";" << endl;
+
+
+					char *temp = new char [str.length()+1];
+					strcpy(temp, str.c_str());
+					char *temp1 = new char [patientInformation.length()+1];
+					strcpy(temp1, patientInformation.c_str());
+					stringstream s;
+					s << temp1 << "/" << str;
+					string path = s.str();
+					char *temp2 = new char [path.length()+1];
+					strcpy(temp2, path.c_str());
+					rename( temp, temp2 );
+					
+					if(!isHere(patientInformation)){
+						put(patientInformation);
+					}
+
+				}catch(imebra::MissingTagError e){
+					patientInformation = loadedDataSet->getString(imebra::TagId(imebra::tagId_t::SeriesDescription_0008_103E), 0);
+					outfile << patientInformation.c_str() << ";" << endl;
+				}catch(imebra::MissingGroupError e){
+				}catch(imebra::CodecWrongFormatError e){
+				}catch(imebra::StreamEOFError e){
+				}
+			}
+			percent = count*100/total;
+			if(percent > 100)
+				percent = 100;
+			if (interrupted){
+		        clear();
+		        attron(COLOR_PAIR(3));
+		        mvprintw((row-1)/2,(col-26)/2," A SIGNAL WAS ENCOUNTERED ");
+		        refresh();
+		        sleep(1);
+				closedir (dir);
+				clrtoeol();
+				getch();
+		        endwin();
+				outfile.close();
+		        exit(0);
+		    }
+		}
+
+		clear();
+        attron(COLOR_PAIR(1));
+        mvprintw((row-1)/2,(col-19)/2," Finished process. ");
+        mvprintw((row-1)/2+1,(col-16)/2," Press any key. ");
+        sleep(2);
 		closedir (dir);
 		clrtoeol();
 		getch();
