@@ -10,6 +10,7 @@
 #include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <chrono>
 
 using namespace std;
 
@@ -112,7 +113,7 @@ void writeStatus(string name){
 
 
 int main(){
-	setlocale(LC_ALL, "");
+	auto start = chrono::high_resolution_clock::now();
 	signal(SIGINT, term);
 
 	std::ofstream outfile;
@@ -194,7 +195,9 @@ int main(){
 			if (interrupted){
 		        clear();
 		        attron(COLOR_PAIR(3));
+				auto stop = chrono::high_resolution_clock::now();
 		        mvprintw((row-1)/2,(col-26)/2," A SIGNAL WAS ENCOUNTERED ");
+				mvprintw((row-1)/2+2,(col-18)/2," Time: %d ms", chrono::duration_cast<chrono::milliseconds>(stop-start).count());
 		        refresh();
 		        sleep(1);
 				closedir (dir);
@@ -229,7 +232,9 @@ int main(){
 			if (interrupted){
 		        clear();
 		        attron(COLOR_PAIR(3));
+				auto stop = chrono::high_resolution_clock::now();
 		        mvprintw((row-1)/2,(col-26)/2," A SIGNAL WAS ENCOUNTERED ");
+				mvprintw((row-1)/2+2,(col-18)/2," Time: %d ms", chrono::duration_cast<chrono::milliseconds>(stop-start).count());
 		        refresh();
 		        sleep(1);
 				closedir (dir);
@@ -308,7 +313,9 @@ int main(){
 			if (interrupted){
 		        clear();
 		        attron(COLOR_PAIR(3));
+				auto stop = chrono::high_resolution_clock::now();
 		        mvprintw((row-1)/2,(col-26)/2," A SIGNAL WAS ENCOUNTERED ");
+				mvprintw((row-1)/2+2,(col-18)/2," Time: %d ms", chrono::duration_cast<chrono::milliseconds>(stop-start).count());
 		        refresh();
 		        sleep(1);
 				closedir (dir);
@@ -319,11 +326,12 @@ int main(){
 		        exit(0);
 		    }
 		}
-
 		clear();
         attron(COLOR_PAIR(1));
         mvprintw((row-1)/2,(col-19)/2," Finished process. ");
         mvprintw((row-1)/2+1,(col-16)/2," Press any key. ");
+		auto stop = chrono::high_resolution_clock::now();
+		mvprintw((row-1)/2+2,(col-18)/2," Time: %d ms", chrono::duration_cast<chrono::milliseconds>(stop-start).count());
         sleep(2);
 		closedir (dir);
 		clrtoeol();
