@@ -332,6 +332,10 @@ int main(){
         mvprintw((row-1)/2+1,(col-16)/2," Press any key. ");
 		auto stop = chrono::high_resolution_clock::now();
 		mvprintw((row-1)/2+2,(col-18)/2," Time: %d ms", chrono::duration_cast<chrono::milliseconds>(stop-start).count());
+		std::ofstream time;
+		time.open("time.txt");
+		time << "Finished in " << chrono::duration_cast<chrono::milliseconds>(stop-start).count() << " ms.";
+		time.close();
         sleep(2);
 		closedir (dir);
 		clrtoeol();
