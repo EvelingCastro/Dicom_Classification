@@ -1,5 +1,3 @@
-First of all, you'll need to install Imebra Lib(https://imebra.com/) for DICOM support.
-
 To compile write in a comand line and press enter:
 $ make
 
